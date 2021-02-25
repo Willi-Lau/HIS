@@ -1,5 +1,21 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div class="doctorlogin">
+
+    登陆
+
   </div>
 </template>
+
+<script>
+
+
+
+  export default {
+    data(){
+
+    },
+    components: {
+
+    }
+  }
+</script>
