@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: demo
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/jqueryhomework?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: root
+#  thymeleaf:
+#    cache: true
+#    check-template: true
+#    check-template-location: true
+#    content-type: text/html
+#    enabled: true
+#    encoding: UTF-8
+
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+
+mybatis:
+  type-aliases-package: com.lwy.demo.bean
+  mapper-locations: mapping/*.xml
+server:
+  port: 8080
+
