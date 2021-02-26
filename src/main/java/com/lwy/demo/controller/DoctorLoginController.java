@@ -1,6 +1,7 @@
 package com.lwy.demo.controller;
 
 
+import com.lwy.demo.entity.DoctorLoginrecode;
 import com.lwy.demo.service.DoctorLoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -27,8 +30,20 @@ public class DoctorLoginController {
         map.put("username",username);
         map.put("password",password);
         String doctorlogin = service.doctorlogin(map);
-        System.out.println(doctorlogin);
-        return doctorlogin;
+        if(doctorlogin != null){
+                //根据username 查找id
+                int id = service.selectid(username);
+                //记录登陆时间
+                DoctorLoginrecode log = new DoctorLoginrecode();
+                log.setDlrdid(id);
+                log.setDlrtime(new Timestamp(new Date().getTime()));
+                service.addrecord(log);
+            return doctorlogin;
+        }
+        else {
+            return "no";
+        }
+
 
     }
 }

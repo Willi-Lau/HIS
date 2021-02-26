@@ -1,5 +1,6 @@
 package com.lwy.demo.service.impl;
 
+import com.lwy.demo.entity.DoctorLoginrecode;
 import com.lwy.demo.mapper.DoctorLoginMapper;
 import com.lwy.demo.service.DoctorLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +18,15 @@ public class DoctorLoginServiceimpl implements DoctorLoginService {
     @Override
     public String doctorlogin(ConcurrentMap map) {
         return mapper.doctorlogin(map);
+    }
+
+    @Override
+    public int selectid(String username) {
+        return mapper.selectid(username);
+    }
+
+    @Override
+    public void addrecord(DoctorLoginrecode doctor) {
+        mapper.addrecord(doctor);
     }
 }

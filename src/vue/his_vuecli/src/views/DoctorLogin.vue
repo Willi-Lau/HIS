@@ -60,6 +60,46 @@
                     )
                 ).then(response=>{      //返回值部分
                     this.inf = response.data
+                    if(this.inf === "医生"){
+
+                        this.$router.push({
+                            path:'/DoctorHome' ,               	//目标URL，为注册的路由
+
+                            query:{
+                                username:this.form.username      	//传入参数，参数会写入URL，params用法同query，只不过参数不会写进URL
+                            }
+
+                        })
+                    }
+                    if(this.inf === "管理员"){
+                        this.$router.push({
+                            path:'/AdminHome' ,               	//目标URL，为注册的路由
+
+                            query:{
+                                username:this.form.username      	//传入参数，参数会写入URL，params用法同query，只不过参数不会写进URL
+                            }
+                        })
+                    }
+                    if(this.inf === "收费员"){
+                        this.$router.push({
+                            path:'/CashierHome' ,               	//目标URL，为注册的路由
+
+                            query:{
+                                username:this.form.username      	//传入参数，参数会写入URL，params用法同query，只不过参数不会写进URL
+                            }
+                        })
+                    }
+                    if(this.inf === "no"){
+                        this.$alert('', '登陆失败 账号密码错误', {
+                            confirmButtonText: '确定',
+                            callback: action => {
+                                this.$message({
+                                    type: 'info',
+                                    message: `no`
+                                });
+                            }
+                        });
+                    }
 
                 }).catch(error=>{
                     console.log(error)
