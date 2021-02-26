@@ -48,6 +48,23 @@
 
         },
         methods:{
+            onSubmit(){
+            //    登陆验证
+                this.$axios.post('DoctorRegisterController/registerdoctor',
+
+                    this.$qs.stringify(
+                        {
+                            username:this.form.username,
+                            password:this.form.password
+                        }
+                    )
+                ).then(response=>{      //返回值部分
+                    this.inf = response.data
+
+                }).catch(error=>{
+                    console.log(error)
+                })
+            },
             Register(){
                 this.$router.push('/DoctorRegiste');
             },

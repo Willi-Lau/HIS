@@ -52,6 +52,9 @@
 
         },
         methods:{
+            nopassword(){
+                this.$router.push('/PatientForgetPassword')
+            },
             Register(){
                 this.$router.push('/PatientRegister')
             }

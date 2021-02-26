@@ -9,6 +9,7 @@ import DoctorForgetPassword from '../views/DoctorForgetPassword.vue'
 import PatientForgetPassword from '../views/PatientForgetPassword.vue'
 import DoctorChangePassword from '../views/DoctorChangePassword.vue'
 import PatientChangePassword from '../views/PatientChangePassword.vue'
+import DoctorHome from '../views/DoctorHome.vue'
 
 Vue.use(VueRouter)
 
@@ -57,6 +58,11 @@ const routes = [
     path: '/PatientChangePassword',
     name: 'PatientChangePassword',
     component: PatientChangePassword
+  },
+  {
+    path: '/DoctorHome',
+    name: 'DoctorHome',
+    component: DoctorHome
   },
 ]
 
