@@ -1,6 +1,6 @@
 <template>
     <div class="doctorlogin">
-        <div class="doctortab">
+        <div class="doctorlogintab">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item>医生登录</el-breadcrumb-item>
@@ -47,18 +47,26 @@
             }
 
         },
+        methods:{
+            Register(){
+                this.$router.push('/DoctorRegiste');
+            },
+            nopassword(){
+                this.$router.push('/DoctorForgetPassword');
+            }
+        },
         components: {
 
-        }
-    }
+        }}
 </script>
 
 <style>
-    .doctortab{
+    .doctorlogintab{
         position: absolute;
         left: 300px;
         top: 20px;
         color: #42b983;
+        z-index: 9999;
 
     }
     .doctorlogin{
@@ -75,7 +83,7 @@
     }
     .doctorlogin_01{
         position: absolute;
-        background-color: #42b983;
+        /*background-color: #42b983;*/
         top: 170px;
         left: 550px;
         width: 400px;

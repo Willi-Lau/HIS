@@ -7,7 +7,7 @@ spring:
       max-request-size: 50MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/jqueryhomework?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/his_lau?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
     password: root
 #  thymeleaf:
@@ -27,8 +27,8 @@ pagehelper:
 
 
 mybatis:
-  type-aliases-package: com.lwy.demo.bean
-  mapper-locations: mapping/*.xml
+  type-aliases-package: com.lwy.demo.entity
+  mapper-locations: mapper/*.xml
 server:
   port: 8080
 

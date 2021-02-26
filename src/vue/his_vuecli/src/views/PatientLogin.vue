@@ -50,6 +50,11 @@
         },
         components: {
 
+        },
+        methods:{
+            Register(){
+                this.$router.push('/PatientRegister')
+            }
         }
     }
 </script>
@@ -76,7 +81,7 @@
     }
     .patientlogin_01{
         position: absolute;
-        background-color: #8ab8e3;
+        /*background-color: #8ab8e3;*/
         top: 170px;
         left: 550px;
         width: 400px;

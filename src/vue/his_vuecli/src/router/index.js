@@ -5,7 +5,10 @@ import DoctorLogin from '../views/DoctorLogin.vue'
 import PatientLogin from '../views/PatientLogin.vue'
 import DoctorRegiste from '../views/DoctorRegiste.vue'
 import PatientRegister from '../views/PatientRegister.vue'
-
+import DoctorForgetPassword from '../views/DoctorForgetPassword.vue'
+import PatientForgetPassword from '../views/PatientForgetPassword.vue'
+import DoctorChangePassword from '../views/DoctorChangePassword.vue'
+import PatientChangePassword from '../views/PatientChangePassword.vue'
 
 Vue.use(VueRouter)
 
@@ -35,7 +38,26 @@ const routes = [
     name: 'PatientRegister',
     component: PatientRegister
   },
-
+  {
+    path: '/DoctorForgetPassword',
+    name: 'DoctorForgetPassword',
+    component: DoctorForgetPassword
+  },
+  {
+    path: '/PatientForgetPassword',
+    name: 'PatientForgetPassword',
+    component: PatientForgetPassword
+  },
+  {
+    path: '/DoctorChangePassword',
+    name: 'DoctorChangePassword',
+    component: DoctorChangePassword
+  },
+  {
+    path: '/PatientChangePassword',
+    name: 'PatientChangePassword',
+    component: PatientChangePassword
+  },
 ]
 
 const router = new VueRouter({
