@@ -14,10 +14,10 @@
             <div class="doctorlogin_01_form">
                 <el-form ref="form" :model="form" label-width="80px">
                     <el-form-item label="用户名" >
-                        <el-input v-model="form.name"></el-input>
+                        <el-input v-model="form.username"></el-input>
                     </el-form-item>
                     <el-form-item label="密码">
-                        <el-input v-model="form.name"></el-input>
+                        <el-input v-model="form.password" type="password"></el-input>
                     </el-form-item>
                     <br><br>
                     <el-form-item>
@@ -50,7 +50,7 @@
         methods:{
             onSubmit(){
             //    登陆验证
-                this.$axios.post('DoctorRegisterController/registerdoctor',
+                this.$axios.post('DoctorLoginController/doctorlogin',
 
                     this.$qs.stringify(
                         {
