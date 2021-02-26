@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lwy.demo.mapper.PatientRegisterMapper">
+
+      <insert id="addpatientuser" parameterType="com.lwy.demo.entity.PatientUser" >
+         insert into patientuser (puusername,pupassword,puname,pusex,pubirthday,pucard,puaddress,
+         puphone,pucreate,puhistory) values (#{puusername},#{pupassword},#{puname},#{pusex},#{pubirthday},
+         #{pucard},#{puaddress},#{puphone},#{pucreate},#{puhistory});
+
+
+
+      </insert>
+
+
+
+</mapper>

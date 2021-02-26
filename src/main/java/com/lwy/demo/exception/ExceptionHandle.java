@@ -26,7 +26,7 @@ public class ExceptionHandle {
     @ResponseBody
     private String exceptionHandlerTooManyResults(TooManyResultsException e){
 
-
+        //并发
         System.out.println("TooManyResultsException异常！！！");
 
         return "no";

@@ -9,74 +9,54 @@
         </div>
         <div class="doctorregisterform">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="登录名" prop="duusername">
+                <el-form-item label="登录名" prop="puusername">
+                    <el-input v-model="ruleForm.puusername"></el-input>
+                </el-form-item>
+
+                <el-form-item label="密码" prop="pupassword">
+                    <el-input type="password" v-model="ruleForm.pupassword" ></el-input>
+                </el-form-item>
+
+                <el-form-item label="确认密码" prop="pusure_password">
+                    <el-input type="password" v-model="ruleForm.pusure_password" ></el-input>
+                </el-form-item>
+
+                <el-form-item label="真实姓名" prop="puname">
                     <el-input v-model="ruleForm.puname"></el-input>
                 </el-form-item>
 
-                <el-form-item label="密码" prop="dupassword">
-                    <el-input type="password" v-model="ruleForm.dupassword" ></el-input>
-                </el-form-item>
-
-                <el-form-item label="确认密码" prop="dusure_password">
-                    <el-input type="password" v-model="ruleForm.dusure_password" ></el-input>
-                </el-form-item>
-
-                <el-form-item label="真实姓名" prop="duname">
-                    <el-input v-model="ruleForm.duname"></el-input>
-                </el-form-item>
-
-                <el-form-item label="性别" prop="dusex">
-                    <el-radio-group v-model="ruleForm.dusex">
+                <el-form-item label="性别" prop="pusex">
+                    <el-radio-group v-model="ruleForm.pusex">
                         <el-radio label="男"></el-radio>
                         <el-radio label="女"></el-radio>
                     </el-radio-group>
                 </el-form-item>
-
-                <el-form-item label="身份证号" prop="ducard">
-                    <el-input v-model="ruleForm.ducard"></el-input>
+                <el-form-item label="出生日期" required>
+                    <el-col :span="11">
+                        <el-form-item prop="pubirthday">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.pubirthday" style="width: 100%;"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
                 </el-form-item>
 
-                <el-form-item label="电话号码" prop="duphone">
-                    <el-input v-model="ruleForm.duphone"></el-input>
+                <el-form-item label="身份证号" prop="pucard">
+                    <el-input v-model="ruleForm.pucard"></el-input>
                 </el-form-item>
-
-                <el-form-item label="住址" prop="duaddress">
-                    <el-input v-model="ruleForm.duaddress"></el-input>
+                <el-form-item label="住址" prop="puaddress">
+                    <el-input v-model="ruleForm.puaddress"></el-input>
                 </el-form-item>
-
-                <el-form-item label="科室" prop="dudepartmentname">
-                    <el-select v-model="ruleForm.dudepartmentname" placeholder="请选择科室" style="margin-left: 20px">
-
-                        <ul v-for="(item,index) in department" >
-
-                            <el-option :label="item" :value="item"></el-option>
-
-
-                        </ul>
-
-                    </el-select>
+                <el-form-item label="电话号码" prop="puphone">
+                    <el-input v-model="ruleForm.puphone"></el-input>
                 </el-form-item>
+                <el-form-item label="过敏史" prop="puhistory">
+                <el-input
 
-                <el-form-item label="类别" prop="dutype">
-                    <el-radio-group v-model="ruleForm.dutype" class="sex">
-                        <el-radio label="医生"></el-radio>
-                        <el-radio label="管理员"></el-radio>
-                        <el-radio label="收费员"></el-radio>
-                    </el-radio-group>
+                        type="textarea"
+                        :rows="2"
+                        placeholder="请输入内容"
+                        v-model="ruleForm.puhistory">
+                </el-input>
                 </el-form-item>
-                <el-form-item label="职称" prop="dutitle" >
-                    <el-radio-group v-model="ruleForm.dutitle" class="sex">
-                        <el-radio label="著名专家"></el-radio>
-                        <el-radio label="教授"></el-radio>
-                        <el-radio label="副教授"></el-radio>
-                        <el-radio label="主治医师"></el-radio>
-                        <el-radio label="副主治医师"></el-radio>
-                        <el-radio label="管理员"></el-radio>
-                        <el-radio label="收费员"></el-radio>
-
-                    </el-radio-group>
-                </el-form-item>
-
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
                     <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -92,14 +72,6 @@
 
     export default {
         created() {
-            //找到所有的品牌
-            this.$axios.post('DoctorRegisterController/selectalldepartment',
-
-            ).then(response=>{      //返回值部分
-                this.department = response.data
-            }).catch(error=>{
-                console.log(error)
-            })
 
         },
         data() {
@@ -109,8 +81,8 @@
                     if (value === '') {
                         callback(new Error('请输入密码'));
                     } else {
-                        if (this.ruleForm.dusure_password !== '') {
-                            this.$refs.ruleForm.validateField('dusure_password');
+                        if (this.ruleForm.pusure_password !== '') {
+                            this.$refs.ruleForm.validateField('pusure_password');
                         }
                         callback();
                     }
@@ -119,7 +91,7 @@
                 var validatePass2 = (rule, value, callback) => {
                     if (value === '') {
                         callback(new Error('请再次输入密码'));
-                    } else if (value !== this.ruleForm.dupassword) {
+                    } else if (value !== this.ruleForm.pupassword) {
                         callback(new Error('两次输入密码不一致!'));
                     } else {
                         callback();
@@ -174,57 +146,48 @@
             return {
                 department:{},
                 ruleForm: {
-                    duusername:'',
-                    dupassword:'',
-                    dusure_password:'',
-                    duname:'',
-                    dusex:'',
-                    ducard:'',
-                    duphone:'',
-                    duaddress:'',
-                    dudepartmentname:'',
-                    dutype:'',
-                    dutitle:''
+                    puusername:'',
+                    pupassword:'',
+                    pusure_password:'',
+                    puname:'',
+                    pusex:'',
+                    pubirthday:'',
+                    pucard:'',
+                    puaddress:'',
+                    puphone:'',
+                    puhistory:'',
+
                 },
                 inf:'',
 
                 rules: {
-                    duusername: [
+                    puusername: [
                         { required: true, message: '请输入注册账号', trigger: 'blur' },
                         { min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' }
                     ],
-                    dupassword: [
+                    pupassword: [
                         { validator: validatePass, trigger: 'blur' }
                     ],
-                    dusure_password: [
+                    pusure_password: [
                         { validator: validatePass2, trigger: 'blur' }
                     ],
-                    duname: [
+                    puname: [
                         { required: true, message: '请输入姓名', trigger: 'blur' },
                         { min: 2, max: 4, message: '长度在 2 到 4 个汉字', trigger: 'blur' }
                     ],
-                    dusex: [
+                    pusex: [
                         { required: true, message: '请选择性别', trigger: 'change' }
                     ],
-                    ducard: [
+                    pucard: [
                         { validator: validateEmail, trigger: 'blur' }
                     ],
-                    duphone: [
+                    puphone: [
                         { validator: validatePhone, trigger: 'blur' }
                     ],
-                    duaddress: [
+                    puaddress: [
                         { required: true, message: '请写入地址', trigger: 'blur' },
                         { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
-                    ],
-                    dudepartmentname: [
-                        { required: true, message: '请选择科室', trigger: 'change' }
-                    ],
-                    dutype: [
-                        { required: true, message: '请选择类别', trigger: 'change' }
-                    ],
-                    dutitle: [
-                        { required: true, message: '请选择职称', trigger: 'change' }
-                    ],
+                    ]
 
 
                 }
@@ -232,7 +195,7 @@
         },
         methods: {
             returnoff(){
-                this.$router.push('/DoctorLogin');
+                this.$router.push('/PatientLogin');
             },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
@@ -240,13 +203,13 @@
 
                         //执行正确操作
                         //改变男女
-                        if(this.ruleForm.dusex === "男"){
-                            this.ruleForm.dusex = 1
+                        if(this.ruleForm.pusex === "男"){
+                            this.ruleForm.pusex = 1
                         }
                         else{
-                            this.ruleForm.dusex = 0
+                            this.ruleForm.pusex = 0
                         }
-                        this.$axios.post('DoctorRegisterController/registerdoctor',
+                        this.$axios.post('PatientRegisterController/registerpatient',
 
                             this.ruleForm
 
@@ -270,7 +233,7 @@
                                 }
                             });
 
-                            this.$router.push('/DoctorLogin');
+                            this.$router.push('/PatientLogin');
                         }
                         if(this.inf === "phone"){
                             this.$alert('', '创建失败 电话已被注册', {
