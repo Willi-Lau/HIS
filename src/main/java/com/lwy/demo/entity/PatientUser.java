@@ -1,12 +1,14 @@
 package com.lwy.demo.entity;
 
 
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 
 import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
+@ApiOperation("患者账户信息")
 public class PatientUser {
 
     private int puid;

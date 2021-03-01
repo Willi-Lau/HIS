@@ -1,9 +1,11 @@
 package com.lwy.demo.entity;
 
 
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 
 @Data
+@ApiOperation("医生账户信息")
 public class DoctorUser {
     private int duid;
     private String duusername;

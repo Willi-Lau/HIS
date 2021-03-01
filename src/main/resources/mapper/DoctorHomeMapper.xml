@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lwy.demo.mapper.DoctorHomeMapper">
+
+    <resultMap id="Allprrecode" type="com.lwy.demo.entity.Patient_Registration_record">
+       <id column="prrid" property="prrid"></id>
+       <result column="prrpuid" property="prrpuid"></result>
+        <result column="prrtime" property="prrtime"></result>
+        <result column="prrmoney" property="prrmoney"></result>
+        <result column="prrmrid" property="prrmrid"></result>
+        <result column="prrWithdrawal_number" property="prrWithdrawal_number"></result>
+        <result column="prrdoid" property="prrdoid"></result>
+        <result column="prralready" property="prralready"></result>
+        <association property="medical_record" javaType="com.lwy.demo.entity.Medical_record">
+            <id column="mrid" property="mrid"></id>
+            <result column="mrpid" property="mrpid"></result>
+            <result column="mrdid" property="mrdid"></result>
+            <result column="mrtime" property="mrtime"></result>
+            <result column="mrchiefcomplaint" property="mrchiefcomplaint"></result>
+            <result column="mrpresentIllness" property="mrpresentIllness"></result>
+            <result column="mrpast" property="mrpast"></result>
+            <result column="mrpersonal" property="mrpersonal"></result>
+            <result column="mrfinal" property="mrfinal"></result>
+            <association property="doctorUser" javaType="com.lwy.demo.entity.DoctorUser">
+                <id column="duid" property="duid"></id>
+                <result column="duusername" property="duusername"></result>
+                <result column="dupassword" property="dupassword"></result>
+                <result column="duname" property="duname"></result>
+                <result column="dusex" property="dusex"></result>
+                <result column="ducard" property="ducard"></result>
+                <result column="duphone" property="duphone"></result>
+                <result column="duaddress" property="duaddress"></result>
+                <result column="dudepartmentname" property="dudepartmentname"></result>
+                <result column="dutype" property="dutype"></result>
+                <result column="dutitle" property="dutitle"></result>
+                <result column="dualive" property="dualive"></result>
+            </association>
+            <association property="patientUser" javaType="com.lwy.demo.entity.PatientUser">
+                <id column="puid" property="puid"></id>
+                <result column="puusername" property="puusername"></result>
+                <result column="pupassword" property="pupassword"></result>
+                <result column="puname" property="puname"></result>
+                <result column="pusex" property="pusex"></result>
+                <result column="pubirthday" property="pubirthday"></result>
+                <result column="pucard" property="pucard"></result>
+                <result column="puaddress" property="puaddress"></result>
+                <result column="puphone" property="puphone"></result>
+                <result column="pucreate" property="pucreate"></result>
+                <result column="puhistory" property="puhistory"></result>
+                <result column="pualive" property="pualive"></result>
+            </association>
+        </association>
+    </resultMap>
+    <!--    根据医生名字  日期 查找所有的挂号记录-->
+    <select id="selectallPRrecode" parameterType="java.util.concurrent.ConcurrentMap"
+            resultMap="Allprrecode">
+        select prr.*,pu.*
+        from patient_registration_record prr,medical_record mr,doctoruser du,patientuser pu
+        <where>
+
+            prr.prrmrid = mr.mrid
+            and
+            mr.mrdid = du.duid
+            and
+            prr.prrpuid = pu.puid
+
+            <if test="patientusername != null and patientusername != ''">
+                 and pu.puname = #{patientusername}
+            </if>
+                and prr.prrtime between #{today} and #{tomorrow}
+                and du.duusername = #{doctorusername}
+                and prr.prralready = #{prralready}
+        </where>
+    </select>
+
+
+
+<!--    根据挂号id 查找挂号及病例信息-->
+    <resultMap id="PRRandMRbyid" type="com.lwy.demo.entity.Patient_Registration_record">
+        <id column="prrid" property="prrid"></id>
+        <result column="prrpuid" property="prrpuid"></result>
+        <result column="prrtime" property="prrtime"></result>
+        <result column="prrmoney" property="prrmoney"></result>
+        <result column="prrmrid" property="prrmrid"></result>
+        <result column="prrWithdrawal_number" property="prrWithdrawal_number"></result>
+        <result column="prrdoid" property="prrdoid"></result>
+        <result column="prralready" property="prralready"></result>
+        <association property="medical_record" javaType="com.lwy.demo.entity.Medical_record">
+            <id column="mrid" property="mrid"></id>
+            <result column="mrpid" property="mrpid"></result>
+            <result column="mrdid" property="mrdid"></result>
+            <result column="mrtime" property="mrtime"></result>
+            <result column="mrchiefcomplaint" property="mrchiefcomplaint"></result>
+            <result column="mrpresentIllness" property="mrpresentIllness"></result>
+            <result column="mrpast" property="mrpast"></result>
+            <result column="mrpersonal" property="mrpersonal"></result>
+            <result column="mrfinal" property="mrfinal"></result>
+            <association property="patientUser" javaType="com.lwy.demo.entity.PatientUser">
+                <id column="puid" property="puid"></id>
+                <result column="puusername" property="puusername"></result>
+                <result column="pupassword" property="pupassword"></result>
+                <result column="puname" property="puname"></result>
+                <result column="pusex" property="pusex"></result>
+                <result column="pubirthday" property="pubirthday"></result>
+                <result column="pucard" property="pucard"></result>
+                <result column="puaddress" property="puaddress"></result>
+                <result column="puphone" property="puphone"></result>
+                <result column="pucreate" property="pucreate"></result>
+                <result column="puhistory" property="puhistory"></result>
+                <result column="pualive" property="pualive"></result>
+            </association>
+        </association>
+
+    </resultMap>
+    <select id="selectPRRandMRbyid" resultMap="PRRandMRbyid" parameterType="int">
+        select prr.*,mr.*,pu.*
+        from Patient_Registration_record prr,medical_record mr,patientuser pu
+        where prr.prrmrid = mr.mrid
+        and pu.puid = prr.prrpuid
+        and prr.prrid = #{id}
+    </select>
+
+
+<!--    根据挂号id 修改病历里主诉等信息-->
+    <update id="updatePRRinf" parameterType="java.util.concurrent.ConcurrentMap">
+        update medical_record mr,Patient_Registration_record prr
+        set  mrchiefcomplaint = #{mrchiefcomplaint},
+             mrpresentIllness = #{mrpresentIllness},
+             mrpast = #{mrpast},
+             mrpersonal = #{mrpersonal},
+             mrfinal = #{mrfinal}
+        where prr.prrmrid = mr.mrid
+        and  prr.prrid = #{prrid}
+    </update>
+
+
+
+
+
+</mapper>
