@@ -4,6 +4,7 @@ package com.lwy.demo.entity;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * 病历表
@@ -24,6 +25,13 @@ public class Medical_record {
     private DoctorUser doctorUser;
     //一对一患者表
     private PatientUser patientUser;
-
+    //一对多检验表
+    private List<Test> testList;
+    //一对多检查表
+    private List<Inspection> inspectionList;
+    //一对多处理表
+    private List<Handle> handleList;
+    //一对多缴费表
+    private List<Pay> payList;
 
 }

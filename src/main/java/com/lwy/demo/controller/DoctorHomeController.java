@@ -2,18 +2,18 @@ package com.lwy.demo.controller;
 
 
 import com.github.pagehelper.PageHelper;
-import com.lwy.demo.entity.Diagnosis;
-import com.lwy.demo.entity.Patient_Registration_record;
+import com.lwy.demo.entity.*;
 import com.lwy.demo.service.DoctorHomeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
+import javax.management.remote.JMXServerErrorException;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -115,6 +115,136 @@ public class DoctorHomeController {
     }
 
 
+    @RequestMapping("/selectallInspection")
+    @ApiOperation("查找所有的检验信息")
+    public CopyOnWriteArrayList<Inspection_items> selectallInspection() {
+        return service.selectallInspection();
+    }
+
+    @RequestMapping("/selectalltest")
+    @ApiOperation("查找所有的检查信息")
+    public CopyOnWriteArrayList<Test_items> selectalltest() {
+        return service.selectalltest();
+    }
+
+    @RequestMapping("/upAllitems")
+    @ApiOperation("提交检查检验结果，到检查表，检验表，和消费记录")
+    public void upAllitems( @RequestBody Allitems[] thisAllitems){
+
+            String id = "";
+
+            for (int i=0;i<thisAllitems.length;i++){
+                //根据挂号id查找病历id
+                int mrid = service.selectMRid(thisAllitems[i].getPrrid());
+                //根据id种类不同 分类处理 存入检查表
+                 if(thisAllitems[i].getId().startsWith("i")){
+                     Inspection inspection = new Inspection();
+                     //查找检验表有多少条数据 手动写入自增id
+                     int countInspection = service.countInspection();
+                     id = "in"+Integer.toString(countInspection+1);
+                     inspection.setInid(id);
+                     inspection.setInmrid(mrid);
+                     inspection.setIndo(thisAllitems[i].getId());
+                     inspection.setInend("未做检查无结果");
+                     inspection.setInnum(1);
+                     inspection.setIntime(new Timestamp(new Date().getTime()));
+                     inspection.setInalive(0);
+                     inspection.setIngivemoney(0);
+                     inspection.setInused(0);
+
+                     //统计检查医生表中有几条数据
+                     int countDoctorInspectionrecord = service.countDoctorInspectionrecord();
+                     //提交到检查医生表
+                     DocotrInspectionrecord docotrInspectionrecord = new DocotrInspectionrecord();
+                     docotrInspectionrecord.setDirid("dir"+Integer.toString(countDoctorInspectionrecord+1));
+                     docotrInspectionrecord.setDirmrid(mrid);
+                     docotrInspectionrecord.setDiriid(thisAllitems[i].getId());
+                     service.insertDoctorInspectionrecord(docotrInspectionrecord);
+
+                     inspection.setInwater(docotrInspectionrecord.getDirid());
+                     //提交到检查表
+                     service.insertInspection(inspection);
+                 }
+                 //存入检验表
+                 else{
+                     Test test = new Test();
+                     //查找检验表有多少条数据 手动写入自增id
+                     int countTest = service.countTest();
+                     id = "te"+Integer.toString(countTest+1);
+                     test.setTid(id);
+                     test.setTmrid(mrid);
+                     test.setTdo(thisAllitems[i].getId());
+                     test.setTend("未做检查无结果");
+                     test.setTnum(1);
+                     test.setTtime(new Timestamp(new Date().getTime()));
+                     test.setTalive(0);
+                     test.setTgivemoney(0);
+                     test.setTused(0);
+
+                     //统计检验医生表中有几条数据
+                     int countDoctorTestrecord = service.countDoctorTestrecord();
+                     //提交到检验医生表  操作时间，操作医生为空
+                     DoctorTestrecode doctorTestrecode = new DoctorTestrecode();
+                     doctorTestrecode.setDtrid("dtr"+Integer.toString(countDoctorTestrecord+1));
+                     doctorTestrecode.setDtrmrid(mrid);
+                     doctorTestrecode.setDtrtid(thisAllitems[i].getId());
+                     service.insertDoctorTestrecord(doctorTestrecode);
+
+                     test.setTwater(doctorTestrecode.getDtrid());
+                     //提交到检验表
+                     service.insertTest(test);
+                 }
+                 //存入缴费表
+                 Pay pay = new Pay();
+                 pay.setPmrid(mrid);
+                 pay.setProid(id);
+                 pay.setPmoney( thisAllitems[i].getMoney());
+                 pay.setPnum(1);
+                 pay.setPallmoney(thisAllitems[i].getMoney());
+                 pay.setPtime(new Timestamp(new Date().getTime()));
+                 pay.setPtype("未选择");
+                 pay.setPgivemoney(0);
+                 pay.setPalive(0);
+                 //提交到缴费表
+                service.insertPay(pay);
+            }
+    }
+
+    @RequestMapping("/selectallTestAndInsprction")
+    @ApiOperation("根据病历id查找 检查，检验，缴费得信息")
+    public CopyOnWriteArrayList<Medical_record> selectallTestAndInsprction(int prrid) {
+        //根据 prrid 找到 mrid
+        int mrid = service.selectMRid(prrid);
+        //根据mrid 查找相关病历信息
+        CopyOnWriteArrayList<Medical_record> list = service.selectallTestAndInsprction(mrid);
+        //System.out.println(list.toString());
+        return list;
+
+    }
+
+    @RequestMapping("/updateTestInspectionPay")
+    @ApiOperation("根据病历id，所作项目id,和创建时间 把相对应alive设置为1")
+    public void updateTestInspectionPay(int mrid,String id,String time) throws ParseException {
+        ConcurrentMap map = new ConcurrentHashMap();
+
+        //根据id 类型，是检查in 还是检验 t 来分类操作
+        if(id.substring(0,1).equals("t")){
+               map.put("mrid",mrid);
+               map.put("id",id);
+            //System.out.println(mrid +"  "+id);
+               service.updateTestalive(map);
+        }
+        else {
+            //System.out.println(id);
+                map.put("mrid",mrid);
+                map.put("id",id);
+            //System.out.println(mrid +"  "+id);
+              service.updateInspectionalive(map);
+        }
+        //pay
+        service.updatepayalive(map);
+
+    }
 
 
 

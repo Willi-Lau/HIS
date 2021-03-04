@@ -89,6 +89,33 @@
                             }
                         })
                     }
+                    if(this.inf === "检验医生"){
+                        this.$router.push({
+                            path:'/DoctorTestHome' ,               	//目标URL，为注册的路由
+
+                            query:{
+                                username:this.form.username      	//传入参数，参数会写入URL，params用法同query，只不过参数不会写进URL
+                            }
+                        })
+                    }
+                    if(this.inf === "检查医生"){
+                        this.$router.push({
+                            path:'/DoctorInspectionHome' ,               	//目标URL，为注册的路由
+
+                            query:{
+                                username:this.form.username      	//传入参数，参数会写入URL，params用法同query，只不过参数不会写进URL
+                            }
+                        })
+                    }
+                    if(this.inf === "药房医生"){
+                        this.$router.push({
+                            path:'/DoctorDrugHome' ,               	//目标URL，为注册的路由
+
+                            query:{
+                                username:this.form.username      	//传入参数，参数会写入URL，params用法同query，只不过参数不会写进URL
+                            }
+                        })
+                    }
                     if(this.inf === "no"){
                         this.$alert('', '登陆失败 账号密码错误', {
                             confirmButtonText: '确定',

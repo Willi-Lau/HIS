@@ -135,6 +135,86 @@
     </update>
 
 
+    <resultMap id="allTestAndInsprction" type="com.lwy.demo.entity.Medical_record">
+        <id column="mrid" property="mrid"></id>
+        <result column="mrpid" property="mrpid"></result>
+        <result column="mrdid" property="mrdid"></result>
+        <result column="mrtime" property="mrtime"></result>
+        <result column="mrchiefcomplaint" property="mrchiefcomplaint"></result>
+        <result column="mrpresentIllness" property="mrpresentIllness"></result>
+        <result column="mrpast" property="mrpast"></result>
+        <result column="mrpersonal" property="mrpersonal"></result>
+        <result column="mrfinal" property="mrfinal"></result>
+        <collection property="testList" ofType="com.lwy.demo.entity.Test">
+            <id column="tid" property="tid"></id>
+            <result column="tmrid" property="tmrid"></result>
+            <result column="tdo" property="tdo"></result>
+            <result column="tend" property="tend"></result>
+            <result column="tnum" property="tnum"></result>
+            <result column="ttime" property="ttime"></result>
+            <result column="talive" property="talive"></result>
+            <result column="tused" property="tused"></result>
+            <result column="tgivemoney" property="tgivemoney"></result>
+            <result column="twater" property="twater"></result>
+            <association property="doctorTestrecode" javaType="com.lwy.demo.entity.DoctorTestrecode">
+                <id column="dtrid" property="dtrid"></id>
+                <result column="dtrmrid" property="dtrmrid"></result>
+                <result column="dtrduid" property="dtrduid"></result>
+                <result column="dtrtid" property="dtrtid"></result>
+                <result column="dtrtime" property="dtrtime"></result>
+            </association>
+            <association property="test_items" javaType="com.lwy.demo.entity.Test_items">
+                <id column="tiid" property="tiid"></id>
+                <result column="tiname" property="tiname"></result>
+                <result column="tipinyin" property="tipinyin"></result>
+                <result column="timoney" property="timoney"></result>
+                <result column="timedical" property="timedical"></result>
+            </association>
+        </collection>
+        <collection property="inspectionList" ofType="com.lwy.demo.entity.Inspection">
+            <id column="inid" property="inid"></id>
+            <result column="inmrid" property="inmrid"></result>
+            <result column="indo" property="indo"></result>
+            <result column="inend" property="inend"></result>
+            <result column="innum" property="innum"></result>
+            <result column="intime" property="intime"></result>
+            <result column="inalive" property="inalive"></result>
+            <result column="inused" property="inused"></result>
+            <result column="ingivemoney" property="ingivemoney"></result>
+            <result column="inwater" property="inwater"></result>
+            <association property="docotrInspectionrecord" javaType="com.lwy.demo.entity.DocotrInspectionrecord">
+                <id column="dirid" property="dirid"></id>
+                <result column="dirmrid" property="dirmrid"></result>
+                <result column="dirduid" property="dirduid"></result>
+                <result column="diriid" property="diriid"></result>
+                <result column="dirtime" property="dirtime"></result>
+            </association>
+            <association property="inspection_items" javaType="com.lwy.demo.entity.Inspection_items">
+                <id column="iiid" property="iiid"></id>
+                <result column="iiname" property="iiname"></result>
+                <result column="iipinyin" property="iipinyin"></result>
+                <result column="iimoney" property="iimoney"></result>
+                <result column="iimedical" property="iimedical"></result>
+            </association>
+        </collection>
+    </resultMap>
+<!--    根据病历 id查找所有的检查 ，检验 相关信息-->
+    <select id="selectallTestAndInsprction" parameterType="int" resultMap="allTestAndInsprction">
+
+          select mr.*,i.*,t.*,dtr.*,dir.*,ii.*,ti.*
+          from Medical_record mr,Inspection i,Test t,DoctorTestrecord dtr,DoctorInspectionrecord dir,
+                inspection_items ii,test_items ti
+          where mr.mrid = i.inmrid
+          and mr.mrid = t.tmrid
+          and t.twater = dtr.dtrid
+          and i.inwater = dir.dirid
+          and ii.iiid = i.indo
+          and ti.tiid = t.tdo
+          and mr.mrid = #{mrid}
+
+    </select>
+
+
 
 
 

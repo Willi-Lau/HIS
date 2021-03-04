@@ -60,6 +60,9 @@
                 <el-form-item label="类别" prop="dutype">
                     <el-radio-group v-model="ruleForm.dutype" class="sex">
                         <el-radio label="医生"></el-radio>
+                        <el-radio label="检验医生"></el-radio>
+                        <el-radio label="检查医生"></el-radio>
+                        <el-radio label="药房医生"></el-radio>
                         <el-radio label="管理员"></el-radio>
                         <el-radio label="收费员"></el-radio>
                     </el-radio-group>
@@ -254,56 +257,56 @@
 
                         ).then(response=>{      //返回值部分
                             this.inf = response.data
+                            if(this.inf === "success"){
+                                //弹窗
+                                this.$alert('', '创建成功', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        this.$message({
+                                            type: 'info',
+                                            message: `Create User Success`
+                                        });
+                                    }
+                                });
 
+                                this.$router.push('/DoctorLogin');
+                            }
+                            if(this.inf === "phone"){
+                                this.$alert('', '创建失败 电话已被注册', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        this.$message({
+                                            message: `Create User false`
+                                        });
+                                    }
+                                });
+                            }
+
+                            if(this.inf === "card"){
+                                this.$alert('', '创建失败 身份证已被注册', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        this.$message({
+                                            message: `Create User false`
+                                        });
+                                    }
+                                });
+                            }
+
+                            if(this.inf === "username"){
+                                this.$alert('', '创建失败 账号已被注册', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        this.$message({
+                                            message: `Create User false`
+                                        });
+                                    }
+                                });
+                            }
                         }).catch(error=>{
                             console.log(error)
                         })
-                        if(this.inf === "success"){
-                            //弹窗
-                            this.$alert('', '创建成功', {
-                                confirmButtonText: '确定',
-                                callback: action => {
-                                    this.$message({
-                                        type: 'info',
-                                        message: `Create User Success`
-                                    });
-                                }
-                            });
 
-                            this.$router.push('/DoctorLogin');
-                        }
-                        if(this.inf === "phone"){
-                            this.$alert('', '创建失败 电话已被注册', {
-                                confirmButtonText: '确定',
-                                callback: action => {
-                                    this.$message({
-                                        message: `Create User false`
-                                    });
-                                }
-                            });
-                        }
-
-                        if(this.inf === "card"){
-                            this.$alert('', '创建失败 身份证已被注册', {
-                                confirmButtonText: '确定',
-                                callback: action => {
-                                    this.$message({
-                                        message: `Create User false`
-                                    });
-                                }
-                            });
-                        }
-
-                        if(this.inf === "username"){
-                            this.$alert('', '创建失败 账号已被注册', {
-                                confirmButtonText: '确定',
-                                callback: action => {
-                                    this.$message({
-                                        message: `Create User false`
-                                    });
-                                }
-                            });
-                        }
 
 
 

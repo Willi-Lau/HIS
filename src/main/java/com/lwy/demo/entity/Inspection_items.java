@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @Data
 @Api("检查项目表")
 public class Inspection_items {
-    private int iiid;
+    private String iiid;
     private String iiname;
     private String iipinyin;
     private BigDecimal iimoney;

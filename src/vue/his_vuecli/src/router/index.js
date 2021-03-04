@@ -12,6 +12,11 @@ import PatientChangePassword from '../views/PatientChangePassword.vue'
 import DoctorHome from '../views/DoctorHome.vue'
 import AdminHome from '../views/AdminHome.vue'
 import CashierHome from '../views/CashierHome.vue'
+import DoctorTestHome from '../views/DoctorTestHome.vue'
+import DoctorInspectionHome from '../views/DoctorInspectionHome.vue'
+import DoctorDrugHome from '../views/DoctorDrugHome.vue'
+
+
 
 Vue.use(VueRouter)
 
@@ -75,6 +80,21 @@ const routes = [
     path: '/CashierHome',
     name: 'CashierHome',
     component: CashierHome
+  },
+  {
+    path: '/DoctorTestHome',
+    name: 'DoctorTestHome',
+    component: DoctorTestHome
+  },
+  {
+    path: '/DoctorInspectionHome',
+    name: 'DoctorInspectionHome',
+    component: DoctorInspectionHome
+  },
+  {
+    path: '/DoctorDrugHome',
+    name: 'DoctorDrugHome',
+    component: DoctorDrugHome
   },
 ]
 

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @Data
 @Api("检验项目表")
 public class Test_items {
-    private int tiid;
+    private String tiid;
     private String tiname;
     private String tipinyin;
     private BigDecimal timoney;
