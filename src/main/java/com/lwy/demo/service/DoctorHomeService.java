@@ -93,5 +93,40 @@ public interface DoctorHomeService {
      * 将付款表相关信息设置为停用
      */
     void updatepayalive(ConcurrentMap map);
+    /**
+     * 查找所有的药品信息*
+     */
+    CopyOnWriteArrayList<Drug> selectallDrug();
+
+    /**
+     * 查找所有的非药品信息
+     */
+    CopyOnWriteArrayList<NoDrug> selectallNoDrug();
+    /**
+     * 提交药品到支付记录
+     */
+    void insertPayfromdrug(Pay pay);
+    /**
+     * 根据药品id修改库存
+     */
+    void updateDrugNum(ConcurrentMap map);
+    /**
+     * 获取Handle表得个数
+     */
+    int countHandle();
+    /**
+     * 统计药品医生记录表数量
+     */
+    int countDoctorDrugrecord();
+    /**
+     * 添加到开药流水里 DoctorDrugrecord
+     */
+    void insertDoctorDrugrecord(DoctorDrugrecord doctorDrugrecord);
+
+    /**
+     * 添加到Hanlde
+     * @param handle
+     */
+    void insertHandle(Handle handle);
 
 }

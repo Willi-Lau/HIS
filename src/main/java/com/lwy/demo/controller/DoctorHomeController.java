@@ -6,6 +6,7 @@ import com.lwy.demo.entity.*;
 import com.lwy.demo.service.DoctorHomeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -231,20 +232,92 @@ public class DoctorHomeController {
         if(id.substring(0,1).equals("t")){
                map.put("mrid",mrid);
                map.put("id",id);
-            //System.out.println(mrid +"  "+id);
                service.updateTestalive(map);
         }
         else {
-            //System.out.println(id);
                 map.put("mrid",mrid);
                 map.put("id",id);
-            //System.out.println(mrid +"  "+id);
               service.updateInspectionalive(map);
         }
         //pay
         service.updatepayalive(map);
 
+
     }
+
+    @RequestMapping("/selectallDrug")
+    @ApiOperation("返回所有药品目录")
+    public CopyOnWriteArrayList<Drug> selectallDrug() {
+        return service.selectallDrug();
+    }
+
+    @RequestMapping("/selectallNoDrug")
+    @ApiOperation("返回所有非药品目录")
+    public CopyOnWriteArrayList<NoDrug> selectallNoDrug() {
+        return service.selectallNoDrug();
+    }
+
+    @RequestMapping("/insertpayfromDrug")
+    @ApiOperation("添加药品到支付列表")
+    public void insertpayfromDrug(@RequestBody TableDateDrug[] tableDataDrug) {
+//        (drid=dr18, drname=整肠生, drformat=盒, drconsumption=一日四次, drtype=无,
+//        drnum=5555, dryounum=15, drmoney=15.5, drmedical=1, allmoney=232.5, prrid=4)
+
+        for (TableDateDrug d : tableDataDrug){
+            //根据prrid 找到Mrid
+            int mrid = service.selectMRid(d.getPrrid());
+
+            //提交到pay表
+            Pay pay = new Pay();
+            pay.setPmrid(mrid);
+            pay.setProid(d.getDrid());
+            pay.setPmoney(d.getDrmoney());
+            pay.setPnum(d.getDryounum());
+            pay.setPallmoney(d.getAllmoney());
+            pay.setPtime(new Timestamp(new Date().getTime()));
+            pay.setPtype("未选择");
+            pay.setPgivemoney(0);
+            pay.setPalive(0);
+            //提交到pay表
+            service.insertPayfromdrug(pay);
+
+            //修改drug 数量
+            ConcurrentMap map = new ConcurrentHashMap();
+            map.put("drid",d.getDrid());
+            map.put("num",d.getDryounum());
+            service.updateDrugNum(map);
+
+            //提交到DoctorDrugrecord 药品医生记录表
+            //统计药品医生记录表数量
+            int countDoctorDrugrecord = service.countDoctorDrugrecord();
+            //添加到开药流水表里
+            DoctorDrugrecord doctorDrugrecord = new DoctorDrugrecord();
+            doctorDrugrecord.setDdrid("ddr"+Integer.toString(countDoctorDrugrecord+1));
+            doctorDrugrecord.setDdrmrid(mrid);
+            doctorDrugrecord.setDdrdid(d.getDrid());
+            //提交
+             service.insertDoctorDrugrecord(doctorDrugrecord);
+
+            //提交到Handle表
+            Handle handle = new Handle();
+            //获取Handle表条数
+            int countHandle = service.countHandle();
+            handle.setHid("h"+Integer.toString(countHandle+1));
+            handle.setHmrid(mrid);
+            handle.setHdo(d.getDrid());
+            handle.setHnum(d.getDryounum());
+            handle.setHtime(new Timestamp(new Date().getTime()));
+            handle.setHalive(0);
+            handle.setHgivemoney(0);
+            handle.setHused(0);
+            handle.setHwater(doctorDrugrecord.getDdrid());
+            //提交
+            service.insertHandle(handle);
+
+
+        }
+    }
+
 
 
 

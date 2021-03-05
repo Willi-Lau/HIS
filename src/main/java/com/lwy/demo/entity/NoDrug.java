@@ -19,4 +19,5 @@ public class NoDrug {
     private int nmedical;
     //一对一非药品医生记录表
     private DoctorNodrugrecord doctorNodrugrecord;
+
 }

@@ -73,7 +73,7 @@ public interface DoctorHomeMapper {
     /**
      * 根据挂号id查找病历id
      */
-    @Select("select   mr.mrid  from Patient_Registration_record prr,Medical_record mr " +
+    @Select("select  mr.mrid  from Patient_Registration_record prr,Medical_record mr " +
             "where prr.prrmrid = mr.mrid and prr.prrid = #{prrid}")
     int selectMRid(int prrid);
     /**
@@ -126,6 +126,50 @@ public interface DoctorHomeMapper {
      */
     @Update("update pay set palive = 1 where pmrid = #{mrid} and proid = #{id} limit 1")
     void updatepayalive(ConcurrentMap map);
+
+    /**
+     * 提交药品到支付记录
+     */
+    @Insert("insert into pay (pmrid,proid,pmoney,pnum,pallmoney,ptime,ptype,pgivemoney,palive) " +
+                   "values(#{pmrid},#{proid},#{pmoney},#{pnum},#{pallmoney},#{ptime},#{ptype},#{pgivemoney},#{palive})")
+    void insertPayfromdrug(Pay pay);
+    /**
+     * 查找所有的药品信息*
+     */
+    @Select("select * from drug")
+    CopyOnWriteArrayList<Drug> selectallDrug();
+
+    /**
+     * 查找所有的非药品信息
+     */
+    @Select("select * from nodrug")
+    CopyOnWriteArrayList<NoDrug> selectallNoDrug();
+    /**
+     * 根据药品id修改库存
+     */
+    @Update("update drug set drnum = drnum - #{num} where drid = #{drid}")
+    void updateDrugNum(ConcurrentMap map);
+    /**
+     * 获取Handle表得个数
+     */
+    @Select("select count(*) from handle")
+    int countHandle();
+    /**
+     * 统计药品医生记录表数量
+     */
+    @Select("select count(*) from DoctorDrugrecord")
+    int countDoctorDrugrecord();
+    /**
+     * 添加到开药流水里 DoctorDrugrecord
+     */
+    @Insert("insert into DoctorDrugrecord(ddrid,ddrmrid,ddrdid) values(#{ddrid},#{ddrmrid},#{ddrdid})")
+    void insertDoctorDrugrecord(DoctorDrugrecord doctorDrugrecord);
+    /**
+     * 提交到Handle表
+     */
+    @Insert("insert into Handle(hid,hmrid,hdo,hnum,htime,halive,hgivemoney,hused,hwater)" +
+            "values(#{hid},#{hmrid},#{hdo},#{hnum},#{htime},#{halive},#{hgivemoney},#{hused},#{hwater})")
+    void insertHandle(Handle handle);
 
 
 

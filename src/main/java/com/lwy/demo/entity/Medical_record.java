@@ -1,15 +1,15 @@
 package com.lwy.demo.entity;
 
 
+import io.swagger.annotations.Api;
 import lombok.Data;
 
 import java.sql.Timestamp;
 import java.util.List;
 
-/**
- * 病历表
- */
+
 @Data
+@Api("病历表")
 public class Medical_record {
 
     private int mrid;

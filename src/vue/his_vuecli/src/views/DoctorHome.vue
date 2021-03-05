@@ -32,7 +32,7 @@
 
                         未诊患者
                         <el-table
-
+                                border
                                 stripe
                                 :data="noform"
                                 style="width: 100%"
@@ -83,6 +83,7 @@
                 <div class="doctorhome_lect_yes" >
                     已诊患者
                     <el-table
+                            border
                             stripe
                             :data="form"
                             style="width: 100%"
@@ -284,6 +285,7 @@
                         <el-tab-pane label="检查">
                             <div>
                                 <el-table
+                                        border
                                         stripe
                                         height="250"
                                         ref="iimultipleTable1"
@@ -345,6 +347,7 @@
                         <el-tab-pane label="检验">
                             <div>
                                 <el-table
+                                        border
                                         stripe
                                         height="250"
                                         ref="timultipleTable"
@@ -409,6 +412,7 @@
 
                     <div>
                         <el-table
+                                border
                                 stripe
                                 height="250"
                                 :data="thisAllitems"
@@ -463,6 +467,7 @@
 <!--                    alive:''-->
                     <div class="doctorhome_right_tabs_fourth_iitiend">
                         <el-table
+                                border
                                 stripe
                                 height="250"
                                 ref="ArrayTestAndInsprctionFinal"
@@ -576,7 +581,101 @@
 
 
                 </el-tab-pane>
-                <el-tab-pane label="治疗及开药" name="fifth">iiiii！</el-tab-pane>
+                <el-tab-pane label="开药" name="fifth">
+<!--                    开药-->
+
+                    <div id="app">
+                        <el-table   border max-height="600px" :data="tableDataDrug" class="tb-edit" style="width: 100%" highlight-current-row  >
+
+                            <el-table-column prop="ni" label="药品名称" width="180">
+                                <!--          必须加 templateb = scope这个 才能使用 scpoe.row 来指向表格里本条数据-->
+                                <template scope="scope">
+                                    <!--            这里这个 @change 是根据 下拉框得改变 来改变 其他属性框里的值-->
+                                    <el-select v-model="scope.row.drname" filterable placeholder="请选择" @change="handleEditdrname(scope.$index, scope.row.drname)">
+                                        <el-option
+                                                v-for="item in allDrug"
+                                                :key="item.drname"
+                                                :label="item.drname+item.drpinyin"
+                                                :value="item.drname">
+                                        </el-option>
+
+                                    </el-select>
+                                    <span>{{scope.row.drname}}</span>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column label="id" width="50">
+                                <template scope="scope">
+<!--                                    <el-input size="small" v-model="scope.row.drid" placeholder="请输入内容" ></el-input>-->
+                                    <span>{{scope.row.drid}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="单位" width="50">
+                                <template scope="scope">
+<!--                                    <el-input size="small" v-model="scope.row.drformat" placeholder="请输入内容" ></el-input>-->
+                                    <span>{{scope.row.drformat}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="次数" width="90">
+                                <template scope="scope">
+<!--                                    <el-input size="small" v-model="scope.row.drconsumption" placeholder="请输入内容" ></el-input>-->
+                                    <span>{{scope.row.drconsumption}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="处方药否" width="90">
+                                <template scope="scope">
+<!--                                    <el-input size="small" v-model="scope.row.drtype" placeholder="请输入内容" ></el-input> -->
+                                    <span>{{scope.row.drtype}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="剩余数量" width="90">
+                                <template scope="scope">
+<!--                                    <el-input size="small" v-model="scope.row.drnum" placeholder="请输入内容" ></el-input> -->
+                                    <span>{{scope.row.drnum}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="开药数量" width="90">
+                                <template scope="scope">
+                                    <el-input size="small" v-model="scope.row.dryounum" placeholder="请输入内容" @change="changeDrugnum(scope.$index, scope.row.dryounum)"></el-input>
+                                    <span>{{scope.row.dryounum}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="单价" width="90">
+                                <template scope="scope">
+<!--                                    <el-input size="small" v-model="scope.row.drmoney" placeholder="请输入内容" ></el-input> -->
+                                    <span>{{scope.row.drmoney}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="总钱数" width="90">
+                                <template scope="scope">
+                                    <!--                                    <el-input size="small" v-model="scope.row.drmoney" placeholder="请输入内容" ></el-input> -->
+                                    <span>{{scope.row.allmoney}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="是否可以医保" width="90">
+                                <template scope="scope">
+<!--                                    <el-input size="small" v-model="scope.row.drmedical" placeholder="请输入内容" ></el-input>-->
+                                    <span>{{scope.row.drmedical === 1? "可以医保" :"不可医保"}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="操作">
+
+
+                                <template scope="scope">
+                                    <!--            <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
+                                    <el-button size="small" type="danger" @click="handleDelete(scope.$index)">删除</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                        <el-button  type="primary" @click="add()">add</el-button>
+                        <el-button  type="success" @click="upDrug()">提交</el-button>
+<!--                        <br>数据:{{tableDataDrug}}-->
+                    </div>
+
+
+                </el-tab-pane>
+                <el-tab-pane label="医疗处理" name="sixth">医疗处理！</el-tab-pane>
+                <el-tab-pane label="医疗处理及开药记录" name="seventh">医疗处理及开药记录！</el-tab-pane>
             </el-tabs>
         </div>
 
@@ -591,7 +690,37 @@
     export default {
         data(){
           return{
-
+              //所有药品信息
+              allDrug:[
+                  {
+                      drid:'',
+                      drname:'',
+                      drpinyin:'',
+                      drformat:'',
+                      drconsumption:'',
+                      drtype:'',
+                      drnum:'',
+                      drmoney:'',
+                      dralive:'',
+                      drmedical:''
+                  }
+              ],
+              //存储得开药表
+              tableDataDrug:[
+                  {
+                      drid:'无',
+                      drname:'请选择',
+                      drformat:'无',
+                      drconsumption: '无',
+                      drtype:'无',
+                      drnum:'无',
+                      dryounum:'0',
+                      drmoney:'无',
+                      drmedical: '无',
+                      allmoney:'0',
+                      prrid:this.thisPRRid
+                  }
+              ],
               inf:'',
               activeName:'first',
               doctorusername:this.$route.query.username,
@@ -876,19 +1005,24 @@
 
         }
         ,created() {
+            //查找所有非药品
+
+            //查找所有的药品
             this.selectall()
             this.ArrayTestAndInsprctionFinal.splice(0,this.ArrayTestAndInsprctionFinal.length)
             //查找所有疾病的信息 selectallDiagnosis
-            this.$axios.post('DoctorHomeController/selectallDiagnosis',
+            this.$axios.post('DoctorHomeController/selectallDrug',
                 this.$qs.stringify(
                     {
                     }
                 )
             ).then(response => {      //返回值部分
-                 this.daignosis = response.data;
+                 this.allDrug = response.data;
             }).catch(error => {
                 console.log(error)
             })
+
+
             //查找所有的检验信息
             this.$axios.post('DoctorHomeController/selectallInspection',
                 this.$qs.stringify(
@@ -929,6 +1063,168 @@
             })
         },
         methods:{
+            //开药增加
+            add(){
+                if(this.thisPRRid === ''){
+                    this.$alert('', '选择失败！请选择患者', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: `no`
+                            });
+                        }
+                    });
+                }
+                else{
+                    this.tableDataDrug.push({
+                            drid:'无',
+                            drname:'请选择',
+                            drformat:'无',
+                            drconsumption: '无',
+                            drtype:'无',
+                            drnum:'无',
+                            dryounum:'0',
+                            drmoney:'无',
+                            drmedical: '无',
+                            allmoney:'0',
+                            prrid:this.thisPRRid
+                        }
+                    );
+                }
+            },
+            //删除药品
+            handleDelete(index){
+                if(this.thisPRRid === ''){
+                    this.$alert('', '选择失败！请选择患者', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: `no`
+                            });
+                        }
+                    });
+                }
+                else {
+
+                    this.tableDataDrug.splice(index,1)
+                    }
+                },
+            //提交药品
+            upDrug(){
+
+
+                    if(this.thisPRRid === ''){
+                        this.$alert('', '选择失败！请选择患者', {
+                            confirmButtonText: '确定',
+                            callback: action => {
+                                this.$message({
+                                    type: 'info',
+                                    message: `no`
+                                });
+                            }
+                        });
+                    }
+                    else{
+                        //删除空
+                        for(let i=0;i<this.tableDataDrug.length;i++){
+                            if(this.tableDataDrug[i].drid === "无"){
+                                this.tableDataDrug.splice(i,1);
+                            }
+                        }
+
+                        this.$axios.post('DoctorHomeController/insertpayfromDrug',
+                            this.tableDataDrug
+                        ).then(response => {      //返回值部分
+                            //清空药品记录
+                            this.tableDataDrug = []
+                            //重新查询所有的药品
+                            this.ArrayTestAndInsprctionFinal.splice(0,this.ArrayTestAndInsprctionFinal.length)
+                            //查找所有疾病的信息 selectallDiagnosis
+                            this.$axios.post('DoctorHomeController/selectallDrug',
+                                this.$qs.stringify(
+                                    {
+                                    }
+                                )
+                            ).then(response => {      //返回值部分
+                                this.allDrug = response.data;
+                            }).catch(error => {
+                                console.log(error)
+                            })
+
+                        }).catch(error => {
+                            console.log(error)
+                        })
+                    }
+
+
+
+            },
+            //数量改变 更改总钱数
+            changeDrugnum(index,dryounum){
+                if(this.thisPRRid === ''){
+                    this.$alert('', '选择失败！请选择患者', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: `no`
+                            });
+                        }
+                    });
+                }
+                else {
+                    if (dryounum < 0 || dryounum > this.tableDataDrug[index].drnum) {
+                        this.$alert('', '数量修改失败，请修改正确数量', {
+                            confirmButtonText: '确定',
+                            callback: action => {
+                                this.$message({
+                                    type: 'info',
+                                    message: `no`
+                                });
+                            }
+                        });
+                    } else {
+                        this.tableDataDrug[index].allmoney = dryounum * this.tableDataDrug[index].drmoney
+                    }
+                }
+
+            },
+            //选择药品名字改变信息
+            handleEditdrname(index,drname){
+                if(this.thisPRRid === ''){
+                    this.$alert('', '选择失败！请选择患者', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: `no`
+                            });
+                        }
+                    });
+                }
+                else {
+                    this.tableDataDrug[index].prrid = this.thisPRRid
+                    for (let i = 0; i < this.allDrug.length; i++) {
+                        //找到对应的药品，添加进去
+                        if (this.allDrug[i].drname === drname) {
+                            this.tableDataDrug[index].drid = this.allDrug[i].drid,
+                                this.tableDataDrug[index].drformat = this.allDrug[i].drformat,
+                                this.tableDataDrug[index].drconsumption = this.allDrug[i].drconsumption,
+                                this.tableDataDrug[index].drnum = this.allDrug[i].drnum,
+                                this.tableDataDrug[index].drmoney = this.allDrug[i].drmoney,
+
+                                this.tableDataDrug[index].drmedical = this.allDrug[i].drmedical
+                                //
+
+
+                        }
+                    }
+                }
+
+            },
+
             //退回检查检验
             deleteArrayTestAndInsprctionFinal1(index){
 
@@ -1089,13 +1385,13 @@
                 }
                 else {
                     for (let i = 0; i < this.thisPageTest_items.length; i++) {
-                        if (this.thisPageTest_items[i].iiname === this.chooseTest.Test) {
+                        if (this.thisPageTest_items[i].tiname === this.chooseTest.Test) {
                             this.thisAllitems.push({
-                                id: this.thisPageTest_items[i].iiid,
+                                id: this.thisPageTest_items[i].tiid,
                                 name: this.chooseTest.Test,
-                                pinyin: this.thisPageTest_items[i].iipinyin,
-                                money: this.thisPageTest_items[i].iimoney,
-                                medical: this.thisPageTest_items[i].iimedical,
+                                pinyin: this.thisPageTest_items[i].tipinyin,
+                                money: this.thisPageTest_items[i].timoney,
+                                medical: this.thisPageTest_items[i].timedical,
                                 prrid: this.thisPRRid
                             })
                         }
@@ -1716,5 +2012,28 @@
         position: relative;
         left: 140px;
     }
+
+/*    表格可操作核心部分*/
+    .tb-edit .el-input {
+        display: none
+    }
+    .tb-edit .current-row .el-input {
+        display: block
+    }
+    .tb-edit .current-row .el-input+span {
+        display: none
+    }
+
+    .tb-edit .el-select {
+        display: none
+    }
+    .tb-edit .current-row .el-select {
+        display: block
+    }
+    .tb-edit .current-row .el-select+span {
+        display: none
+    }
+    /*    表格可操作核心部分*/
+
 
 </style>

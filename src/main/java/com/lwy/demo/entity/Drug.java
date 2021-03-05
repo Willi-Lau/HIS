@@ -21,4 +21,5 @@ public class Drug {
    private int drmedical;
    //一对一药品医生记录表
    private DoctorDrugrecord doctorDrugrecord;
+
 }

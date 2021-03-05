@@ -23,6 +23,7 @@ public class DoctorHomeServiceimpl implements DoctorHomeService {
         return mapper.selectallPRrecode(map);
     }
 
+
     @Override
     public Patient_Registration_record selectPRRandMRbyid(int id) {
         return mapper.selectPRRandMRbyid(id);
@@ -116,6 +117,46 @@ public class DoctorHomeServiceimpl implements DoctorHomeService {
     @Override
     public void updatepayalive(ConcurrentMap map) {
         mapper.updatepayalive(map);
+    }
+
+    @Override
+    public CopyOnWriteArrayList<Drug> selectallDrug() {
+        return mapper.selectallDrug();
+    }
+
+    @Override
+    public CopyOnWriteArrayList<NoDrug> selectallNoDrug() {
+        return mapper.selectallNoDrug();
+    }
+
+    @Override
+    public void insertPayfromdrug(Pay pay) {
+        mapper.insertPayfromdrug(pay);
+    }
+
+    @Override
+    public void updateDrugNum(ConcurrentMap map) {
+        mapper.updateDrugNum(map);
+    }
+
+    @Override
+    public int countHandle() {
+        return mapper.countHandle();
+    }
+
+    @Override
+    public int countDoctorDrugrecord() {
+        return mapper.countDoctorDrugrecord();
+    }
+
+    @Override
+    public void insertDoctorDrugrecord(DoctorDrugrecord doctorDrugrecord) {
+        mapper.insertDoctorDrugrecord(doctorDrugrecord);
+    }
+
+    @Override
+    public void insertHandle(Handle handle) {
+        mapper.insertHandle(handle);
     }
 
     @Override
