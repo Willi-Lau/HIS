@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentMap;
 @Api("医生修改密码界面")
 public class DoctorChangePasswordController {
 
+    public static final String a = "123";
     @Autowired
     private DoctorChangePasswordService service;
 
@@ -29,5 +30,9 @@ public class DoctorChangePasswordController {
         map.put("password",password);
 
         service.changepassword(map);
+
+        String a = "123";
+
+        
     }
 }

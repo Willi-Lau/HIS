@@ -674,7 +674,71 @@
 
 
                 </el-tab-pane>
-                <el-tab-pane label="医疗处理" name="sixth">医疗处理！</el-tab-pane>
+                <el-tab-pane label="医疗处理" name="sixth">
+
+                    <div id="app2">
+                        <el-table border :data="tableDataNoDrug" class="tb-edit2" style="width: 100%" highlight-current-row >
+                            <el-table-column label="id" width="120">
+                                <template scope="scope">
+                                    <span>{{scope.row.nid}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="ni" label="处理名字">
+                                <!--          必须加 templateb = scope这个 才能使用 scpoe.row 来指向表格里本条数据-->
+                                <template scope="scope">
+                                    <!--            这里这个 @change 是根据 下拉框得改变 来改变 其他属性框里的值-->
+                                    <el-select v-model="scope.row.nname" placeholder="请选择" @change="handleEditNoDrugName(scope.$index, scope.row.nname)">
+                                        <el-option
+                                                v-for="item in allNoDrug"
+                                                :key="item.nname"
+                                                :label="item.nname + item.npinyin"
+                                                :value="item.nname">
+                                        </el-option>
+
+                                    </el-select>
+                                    <span>{{scope.row.nname}}</span>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column label="单位" width="120">
+                                <template scope="scope">
+                                    <span>{{scope.row.nformat}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="费用" width="120">
+                                <template scope="scope">
+                                    <span>{{scope.row.nmoney}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="数量" width="120">
+                                <template scope="scope">
+                                    <el-input size="small" v-model="scope.row.nnum" placeholder="请输入内容" @change="changeNoDrugnum(scope.$index, scope.row.nnum)"></el-input>
+                                    <span>{{scope.row.nnum}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="总钱数" width="120">
+                                <template scope="scope">
+                                    <span>{{scope.row.nallmoney}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="是否可以医保" width="90">
+                                <template scope="scope">
+                                    <!--                                    <el-input size="small" v-model="scope.row.drmedical" placeholder="请输入内容" ></el-input>-->
+                                    <span>{{scope.row.nmedical === 1? "可以医保" :"不可医保"}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="操作">
+
+
+                                <template scope="scope">
+                                    <!--            <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
+                                    <el-button size="small" type="danger" @click="handleDeleteNoDrug(scope.$index)">删除</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                        <el-button size="small" type="danger" @click="addnodrug()">add</el-button>
+                    </div>
+                </el-tab-pane>
                 <el-tab-pane label="医疗处理及开药记录" name="seventh">医疗处理及开药记录！</el-tab-pane>
             </el-tabs>
         </div>
@@ -690,6 +754,31 @@
     export default {
         data(){
           return{
+              //所有非药品处理信息
+              allNoDrug:[
+                  {
+                      nid:'',
+                      nname:'',
+                      npinyin:'',
+                      nformat:'',
+                      nmoney:'',
+                      nmedical:''
+                  }
+              ],
+              //记录
+              tableDataNoDrug:[
+                  {
+                      nid:'无',
+                      nname:'无',
+                      npinyin:'无',
+                      nformat:'无',
+                      nmoney:'无',
+                      nmedical:'无',
+                      nnum:'0',
+                      nallmoney:'0',
+                      prrid:this.thisPRRid
+              }
+              ],
               //所有药品信息
               allDrug:[
                   {
@@ -1005,22 +1094,45 @@
 
         }
         ,created() {
-            //查找所有非药品
 
-            //查找所有的药品
             this.selectall()
             this.ArrayTestAndInsprctionFinal.splice(0,this.ArrayTestAndInsprctionFinal.length)
-            //查找所有疾病的信息 selectallDiagnosis
+            //查找所有非药品
+            this.$axios.post('DoctorHomeController/selectallNoDrug',
+                this.$qs.stringify(
+                    {
+                    }
+                )
+            ).then(response => {      //返回值部分
+                this.allNoDrug = response.data;
+            }).catch(error => {
+                console.log(error)
+            })
+            //查找所有的药品
             this.$axios.post('DoctorHomeController/selectallDrug',
                 this.$qs.stringify(
                     {
                     }
                 )
             ).then(response => {      //返回值部分
-                 this.allDrug = response.data;
+                this.allDrug = response.data;
             }).catch(error => {
                 console.log(error)
             })
+            this.selectall()
+            this.ArrayTestAndInsprctionFinal.splice(0,this.ArrayTestAndInsprctionFinal.length)
+            //查找所有疾病的信息 selectallDiagnosis
+            this.$axios.post('DoctorHomeController/selectallDiagnosis',
+                this.$qs.stringify(
+                    {
+                    }
+                )
+            ).then(response => {      //返回值部分
+                this.daignosis = response.data;
+            }).catch(error => {
+                console.log(error)
+            })
+
 
 
             //查找所有的检验信息
@@ -1063,6 +1175,86 @@
             })
         },
         methods:{
+            //根据数量得改变改变钱数
+            changeNoDrugnum(){
+
+            },
+            //删除
+            handleDeleteNoDrug(index){
+                if(this.thisPRRid === ''){
+                    this.$alert('', '选择失败！请选择患者', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: `no`
+                            });
+                        }
+                    });
+                }
+                else {
+
+                    this.tableDataNoDrug.splice(index,1)
+                }
+            },
+            //根据选择显示信息
+            handleEditNoDrugName(index,name){
+                if(this.thisPRRid === ''){
+                    this.$alert('', '选择失败！请选择患者', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: `no`
+                            });
+                        }
+                    });
+                }
+                else {
+                    this.tableDataNoDrug[index].prrid = this.thisPRRid
+                    for (let i = 0; i < this.allNoDrug.length; i++) {
+                        //找到对应的药品，添加进去
+                        if (this.allNoDrug[i].nname === name) {
+                            this.tableDataNoDrug[index].nid = this.allNoDrug[i].nid,
+                                this.tableDataNoDrug[index].nformat = this.allNoDrug[i].nformat,
+                                this.tableDataNoDrug[index].nmoney = this.allNoDrug[i].nmoney,
+
+                                this.tableDataNoDrug[index].nmedical = this.allNoDrug[i].nmedical
+                            //
+
+
+                        }
+                    }
+                }
+            },
+            //增加非药品处理表
+            addnodrug(){
+                if(this.thisPRRid === ''){
+                    this.$alert('', '选择失败！请选择患者', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: `no`
+                            });
+                        }
+                    });
+                }
+                else{
+                    this.tableDataNoDrug.push({
+                        nid:'无',
+                        nname:'无',
+                        npinyin:'无',
+                        nformat:'无',
+                        nmoney:'无',
+                        nmedical:'无',
+                        nnum:'0',
+                        nallmoney:'0',
+                        prrid:this.thisPRRid
+                        }
+                    );
+                }
+            },
             //开药增加
             add(){
                 if(this.thisPRRid === ''){
@@ -1268,7 +1460,7 @@
                     });
                 }
                 else{
-//再次查询返回这个患者所有检验检查相关信息
+            //再次查询返回这个患者所有检验检查相关信息
                 this.$axios.post('DoctorHomeController/selectallTestAndInsprction',
                     this.$qs.stringify({
                         prrid: this.thisPRRid
@@ -1324,8 +1516,8 @@
                     }
                     //检查
                     for(let i=0;i<this.allTestAndInsprction[0].inspectionList.length;i++){
-                        //没被禁用再添加
-                        if(this.allTestAndInsprction[0].inspectionList[i].inalive === 0){
+                        //没被禁用再添加 不是检查无在添加
+                        if(this.allTestAndInsprction[0].inspectionList[i].inalive === 0 && this.allTestAndInsprction[0].inspectionList[i].indo != "i0"){
                             this.ArrayTestAndInsprctionFinal.push({
                                 mrid:this.allTestAndInsprction[0].inspectionList[i].inmrid,
                                 createtime:this.allTestAndInsprction[0].inspectionList[i].intime,
@@ -1344,7 +1536,7 @@
                     //检验
                     for(let i=0;i<this.allTestAndInsprction[0].testList.length;i++){
                         //没被禁用再添加
-                        if(this.allTestAndInsprction[0].testList[i].talive === 0){
+                        if(this.allTestAndInsprction[0].testList[i].talive === 0&& this.allTestAndInsprction[0].testList[i].tdo != "t0"){
                             this.ArrayTestAndInsprctionFinal.push({
                                 mrid:this.allTestAndInsprction[0].testList[i].tmrid,
                                 createtime:this.allTestAndInsprction[0].testList[i].ttime,
@@ -1445,7 +1637,39 @@
                         }
                     });
                 }else {
-                    //upAllitems
+                    //无检验 i自动添加 0
+                    let testnum=0;
+                    let inspectionnum =0;
+                    for(let i=0;i<this.thisAllitems.length;i++){
+                               if(this.thisAllitems[i].id.substring(0,1)==="i"){
+                                   inspectionnum++
+                               }
+                               else{
+                                testnum++
+                             }
+                    }
+                    if(testnum === 0){
+                        this.thisAllitems.push({
+                            id: "t0",
+                            name: "检验无",
+                            pinyin: "wu",
+                            money: 0,
+                            medical: 0,
+                            prrid: this.thisPRRid
+                        })
+                    }
+                    else{
+                        this.thisAllitems.push({
+                            id: "i0",
+                            name: "检查无",
+                            pinyin: "wu",
+                            money: 0,
+                            medical: 0,
+                            prrid: this.thisPRRid
+                        })
+                    }
+
+                    // upAllitems
                     this.$axios.post('DoctorHomeController/upAllitems',
                         this.thisAllitems
 
@@ -2013,7 +2237,7 @@
         left: 140px;
     }
 
-/*    表格可操作核心部分*/
+/*    表格可操作核心部分  开药*/
     .tb-edit .el-input {
         display: none
     }
@@ -2033,7 +2257,27 @@
     .tb-edit .current-row .el-select+span {
         display: none
     }
-    /*    表格可操作核心部分*/
+    /*    表格可操作核心部分 非药品处理*/
+
+    .tb-edit2 .el-input {
+        display: none
+    }
+    .tb-edit2 .current-row .el-input {
+        display: block
+    }
+    .tb-edit2 .current-row .el-input+span {
+        display: none
+    }
+
+    .tb-edit2 .el-select {
+        display: none
+    }
+    .tb-edit2 .current-row .el-select {
+        display: block
+    }
+    .tb-edit2 .current-row .el-select+span {
+        display: none
+    }
 
 
 </style>

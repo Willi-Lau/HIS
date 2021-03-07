@@ -139,11 +139,7 @@ public interface DoctorHomeMapper {
     @Select("select * from drug")
     CopyOnWriteArrayList<Drug> selectallDrug();
 
-    /**
-     * 查找所有的非药品信息
-     */
-    @Select("select * from nodrug")
-    CopyOnWriteArrayList<NoDrug> selectallNoDrug();
+
     /**
      * 根据药品id修改库存
      */
@@ -170,7 +166,11 @@ public interface DoctorHomeMapper {
     @Insert("insert into Handle(hid,hmrid,hdo,hnum,htime,halive,hgivemoney,hused,hwater)" +
             "values(#{hid},#{hmrid},#{hdo},#{hnum},#{htime},#{halive},#{hgivemoney},#{hused},#{hwater})")
     void insertHandle(Handle handle);
-
+    /**
+     * 查找所有的非药品信息
+     */
+    @Select("select * from nodrug")
+    CopyOnWriteArrayList<NoDrug> selectallNoDrug();
 
 
 }
