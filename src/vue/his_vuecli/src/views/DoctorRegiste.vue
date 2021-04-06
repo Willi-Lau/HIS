@@ -63,7 +63,7 @@
                         <el-radio label="检验医生"></el-radio>
                         <el-radio label="检查医生"></el-radio>
                         <el-radio label="药房医生"></el-radio>
-                        <el-radio label="管理员"></el-radio>
+                        <el-radio label="管理员"></el-radio>`
                         <el-radio label="收费员"></el-radio>
                     </el-radio-group>
                 </el-form-item>

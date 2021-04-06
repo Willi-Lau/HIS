@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: demo
@@ -20,7 +23,6 @@ spring:
 #    enabled: true
 #    encoding: UTF-8
 
-
 pagehelper:
   helperDialect: mysql
   reasonable: true
@@ -31,6 +33,5 @@ pagehelper:
 mybatis:
   type-aliases-package: com.lwy.demo.entity
   mapper-locations: mapper/*.xml
-server:
-  port: 8080
+
 

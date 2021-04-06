@@ -160,6 +160,21 @@ public class DoctorHomeServiceimpl implements DoctorHomeService {
     }
 
     @Override
+    public int countDoctorNoDrugRecord() {
+        return mapper.countDoctorNoDrugRecord();
+    }
+
+    @Override
+    public int selectDridByMR(int mrid) {
+        return mapper.selectDridByMR(mrid);
+    }
+
+    @Override
+    public void insertDoctorNoDrugRedord(DoctorNodrugrecord doctorNodrugrecord) {
+        mapper.insertDoctorNoDrugRedord(doctorNodrugrecord);
+    }
+
+    @Override
     public CopyOnWriteArrayList<Medical_record> selectallTestAndInsprction(int mrid) {
         return mapper.selectallTestAndInsprction(mrid);
     }

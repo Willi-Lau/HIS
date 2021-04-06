@@ -737,6 +737,7 @@
                             </el-table-column>
                         </el-table>
                         <el-button size="small" type="danger" @click="addnodrug()">add</el-button>
+                        <el-button size="small" type="success" @click="uploadnodrug()">提交</el-button>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="医疗处理及开药记录" name="seventh">医疗处理及开药记录！</el-tab-pane>
@@ -1175,9 +1176,52 @@
             })
         },
         methods:{
+            //提交到后台
+            uploadnodrug(){
+                if(this.thisPRRid === ''){
+                    this.$alert('', '选择失败！请选择患者', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: `no`
+                            });
+                        }
+                    });
+                }
+                else
+                {
+                    //删除空
+                    for(let i=0;i<this.tableDataNoDrug.length;i++){
+                        if(this.tableDataNoDrug[i].nid === "无"){
+                            this.tableDataNoDrug.splice(i,1);
+                        }
+                    }
+                    //向后台增加
+                    this.$axios.post('DoctorHomeController/uploadallNoDrug',
+                        this.tableDataNoDrug
+                    ).then(response => {      //返回值部分
+                        this.tableDataNoDrug = []
+                    }).catch(error => {
+                        console.log(error)
+                    })
+                }
+            },
             //根据数量得改变改变钱数
-            changeNoDrugnum(){
-
+            changeNoDrugnum(index,nnum){
+                if (nnum < 0 ) {
+                    this.$alert('', '数量修改失败，请修改正确数量', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: `no`
+                            });
+                        }
+                    });
+                } else {
+                    this.tableDataNoDrug[index].nallmoney = nnum * this.tableDataNoDrug[index].nmoney
+                }
             },
             //删除
             handleDeleteNoDrug(index){

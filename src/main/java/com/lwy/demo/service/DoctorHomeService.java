@@ -128,5 +128,19 @@ public interface DoctorHomeService {
      * @param handle
      */
     void insertHandle(Handle handle);
+    /**
+     * 统计非药品流水表的条数
+     */
+    int countDoctorNoDrugRecord();
+    /**
+     * 根据mr 病历表查找医生Id
+     */
+    int selectDridByMR(int mrid);
+
+    /**
+     * 提交到非药品流水
+     * @param doctorNodrugrecord
+     */
+    void insertDoctorNoDrugRedord(DoctorNodrugrecord doctorNodrugrecord);
 
 }

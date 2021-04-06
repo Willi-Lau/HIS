@@ -2,7 +2,7 @@
     <div class="doctorhome">
         <!--        侧边栏-->
         <div>
-            管理员
+
         </div>
 
     </div>

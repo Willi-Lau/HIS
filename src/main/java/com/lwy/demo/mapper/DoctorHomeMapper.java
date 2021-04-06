@@ -171,6 +171,21 @@ public interface DoctorHomeMapper {
      */
     @Select("select * from nodrug")
     CopyOnWriteArrayList<NoDrug> selectallNoDrug();
+    /**
+     * 统计非药品流水表的条数
+     */
+    @Select("select count(*) from doctornodrugrecord")
+    int countDoctorNoDrugRecord();
+    /**
+     * 根据mr 病历表查找医生Id
+     */
+    @Select("select mrdid from medical_record where mrid = #{mrid}")
+    int selectDridByMR(int mrid);
+    /**
+     * 提交到非药品医生记录表
+     */
+    @Insert("insert into doctornodrugrecord(dndrid,dndrmrid,dndrndid) values(#{dndrid},#{dndrmrid},#{dndrndid})")
+    void insertDoctorNoDrugRedord(DoctorNodrugrecord doctorNodrugrecord);
 
 
 }

@@ -4,8 +4,8 @@
 <mapper namespace="com.lwy.demo.mapper.DoctorHomeMapper">
 
     <resultMap id="Allprrecode" type="com.lwy.demo.entity.Patient_Registration_record">
-       <id column="prrid" property="prrid"></id>
-       <result column="prrpuid" property="prrpuid"></result>
+        <id column="prrid" property="prrid"></id>
+        <result column="prrpuid" property="prrpuid"></result>
         <result column="prrtime" property="prrtime"></result>
         <result column="prrmoney" property="prrmoney"></result>
         <result column="prrmrid" property="prrmrid"></result>

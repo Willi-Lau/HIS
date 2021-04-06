@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -316,6 +317,69 @@ public class DoctorHomeController {
 
 
         }
+    }
+
+    @RequestMapping("/uploadallNoDrug")
+    @ApiOperation("提交非药品医疗处理")
+    public void uploadallNoDrug(@RequestBody TableDateNoDrug[] tableDateNoDrugs){
+//        TableDateNoDrug(nid=ndr10, nname=产后护理, pinyin=null, nformat=次, nnomney=null, nmediacl=0, nnum=12, nallmoney=1200000, prrid=2)
+//        TableDateNoDrug(nid=ndr1, nname=静脉注射葡萄糖, pinyin=null, nformat=次, nnomney=null, nmediacl=0, nnum=11, nallmoney=440, prrid=2)
+        for(TableDateNoDrug t : tableDateNoDrugs){
+            //System.out.println(t);
+            //根据prrid 找到Mrid
+            int mrid = service.selectMRid(t.getPrrid());
+            //提交到pay表
+            Pay pay = new Pay();
+            pay.setPmrid(mrid);
+            pay.setProid(t.getNid());
+            pay.setPmoney(t.getNmoney());
+            pay.setPnum(t.getNnum());
+            pay.setPallmoney(t.getNallmoney());
+            pay.setPtime(new Timestamp(new Date().getTime()));
+            pay.setPtype("未选择");
+            pay.setPgivemoney(0);
+            pay.setPalive(0);
+            //提交到pay表
+            service.insertPayfromdrug(pay);
+            //提交到非药品处理流水表中
+            //统计非药品流水记录表的数量
+            int countDoctorNoDrugRecord = service.countDoctorNoDrugRecord();
+            String dndrid = "dndr"+Integer.toString(countDoctorNoDrugRecord+1);
+           // System.out.println("****************"+dndrid);
+
+            DoctorNodrugrecord doctorNodrugrecord = new DoctorNodrugrecord();
+            doctorNodrugrecord.setDndrid(dndrid);
+            doctorNodrugrecord.setDndrmrid(mrid);
+            //根据病历表查找医生id
+            int drid = service.selectDridByMR(mrid);
+           // doctorNodrugrecord.setDndrduid(drid);
+            doctorNodrugrecord.setDndrndid(t.getNid());
+            //doctorNodrugrecord.setDndrtime(new Timestamp(new Date().getTime()));
+            //提交到非药品医生记录表n
+            service.insertDoctorNoDrugRedord(doctorNodrugrecord);
+
+            //提交到Handle表
+            Handle handle = new Handle();
+            //获取Handle表条数
+            int countHandle = service.countHandle();
+            handle.setHid("h"+Integer.toString(countHandle+1));
+            handle.setHmrid(mrid);
+            handle.setHdo(t.getNid());
+            handle.setHnum(t.getNnum());
+            handle.setHtime(new Timestamp(new Date().getTime()));
+            handle.setHalive(0);
+            handle.setHgivemoney(0);
+            handle.setHused(0);
+            handle.setHwater(doctorNodrugrecord.getDndrid());
+            //提交
+            service.insertHandle(handle);
+
+
+
+
+        }
+
+
     }
 
 
