@@ -142,5 +142,24 @@ public interface DoctorHomeService {
      * @param doctorNodrugrecord
      */
     void insertDoctorNoDrugRedord(DoctorNodrugrecord doctorNodrugrecord);
-
+    /**
+     * 根据mrid返回患者所有非药品相关处理
+     */
+    CopyOnWriteArrayList<Handle>selectallHandle(int mrid);
+    /**
+     * 根据id 在药品清单查找名字
+     */
+    String selectNameByidFromDrug(String id);
+    /**
+     * 根据id 在非药品清单查找名字
+     */
+    String selectNameByidFromNoDrug(String id);
+    /**
+     * 向 Handle Drug Pay 表插入对应记录
+     */
+    void insertDrugOrHandleWithPayRecord(DrugOrHandleWithPayRecord drugOrHandleWithPayRecord);
+    /**
+     * 统计pay 表数据个数
+     */
+    int countPay();
 }

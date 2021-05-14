@@ -2,13 +2,14 @@ package com.lwy.demo.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * 检查表
  */
 @Data
-public class Inspection {
+public class Inspection implements Serializable {
     private String inid;
     private int inmrid;
     private String indo;

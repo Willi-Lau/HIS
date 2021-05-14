@@ -186,6 +186,31 @@ public interface DoctorHomeMapper {
      */
     @Insert("insert into doctornodrugrecord(dndrid,dndrmrid,dndrndid) values(#{dndrid},#{dndrmrid},#{dndrndid})")
     void insertDoctorNoDrugRedord(DoctorNodrugrecord doctorNodrugrecord);
+    /**
+     * 根据mrid返回患者所有非药品相关处理
+     */
+    @Select("select * from handle where hmrid = #{mrid}")
+    CopyOnWriteArrayList<Handle>selectallHandle(int mrid);
+    /**
+     * 根据id 在药品清单查找名字
+     */
+    @Select("select drname from drug where drid = #{id}")
+    String selectNameByidFromDrug(String id);
+    /**
+     * 根据id 在非药品清单查找名字
+     */
+    @Select("select nname from nodrug where nid = #{id}")
+    String selectNameByidFromNoDrug(String id);
+    /**
+     * 向 Handle Drug Pay 表插入对应记录
+     */
+    @Insert("insert into DrugOrHandleWithPayRecord(pid,dhid) values(#{pid},#{dhid})")
+    void insertDrugOrHandleWithPayRecord(DrugOrHandleWithPayRecord drugOrHandleWithPayRecord);
+    /**
+     * 统计pay 表数据个数
+     */
+    @Select("select count(*) from pay")
+    int countPay();
 
 
 }

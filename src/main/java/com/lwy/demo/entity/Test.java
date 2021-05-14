@@ -3,13 +3,14 @@ package com.lwy.demo.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * 检验表
  */
 @Data
-public class Test {
+public class Test implements Serializable {
     private String tid;
     private int tmrid;
     private String tdo;

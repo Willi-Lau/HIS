@@ -4,13 +4,14 @@ package com.lwy.demo.entity;
 import io.swagger.annotations.Api;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
 
 @Data
 @Api("病历表")
-public class Medical_record {
+public class Medical_record implements Serializable {
 
     private int mrid;
     private int mrpid;

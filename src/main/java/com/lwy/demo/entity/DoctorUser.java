@@ -4,9 +4,11 @@ package com.lwy.demo.entity;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @ApiOperation("医生账户信息")
-public class DoctorUser {
+public class DoctorUser implements Serializable {
     private int duid;
     private String duusername;
     private String dupassword;

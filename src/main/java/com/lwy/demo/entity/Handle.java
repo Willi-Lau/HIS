@@ -2,6 +2,7 @@ package com.lwy.demo.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -9,7 +10,7 @@ import java.sql.Timestamp;
  *
  */
 @Data
-public class Handle {
+public class Handle implements Serializable {
     private String hid;
     private int hmrid;
     private String hdo;

@@ -3,13 +3,14 @@ package com.lwy.demo.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * 非药品
  */
 @Data
-public class NoDrug {
+public class NoDrug implements Serializable {
     private String nid;
     private String nname;
     private String npinyin;

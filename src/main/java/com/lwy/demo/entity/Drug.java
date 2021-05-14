@@ -4,11 +4,12 @@ package com.lwy.demo.entity;
 import io.swagger.annotations.Api;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
 @Api("药品收费项目表")
-public class Drug {
+public class Drug implements Serializable {
    private String drid;
    private String drname;
    private String drpinyin;

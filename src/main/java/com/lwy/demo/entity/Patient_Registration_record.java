@@ -3,6 +3,7 @@ package com.lwy.demo.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
@@ -10,7 +11,7 @@ import java.sql.Timestamp;
  * 挂号记录表
  */
 @Data
-public class Patient_Registration_record {
+public class Patient_Registration_record implements Serializable {
 
     private int prrid;
     private int prrpuid;

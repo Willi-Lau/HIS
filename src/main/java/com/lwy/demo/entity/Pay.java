@@ -2,6 +2,7 @@ package com.lwy.demo.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
@@ -9,7 +10,7 @@ import java.sql.Timestamp;
  * 缴费表
  */
 @Data
-public class Pay {
+public class Pay implements Serializable {
     private int pid;
     private int pmrid;
     private String proid;

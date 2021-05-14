@@ -4,12 +4,13 @@ package com.lwy.demo.entity;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
 @ApiOperation("患者账户信息")
-public class PatientUser {
+public class PatientUser implements Serializable {
 
     private int puid;
     private String puusername;

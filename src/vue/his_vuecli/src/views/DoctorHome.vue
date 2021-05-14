@@ -740,7 +740,56 @@
                         <el-button size="small" type="success" @click="uploadnodrug()">提交</el-button>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="医疗处理及开药记录" name="seventh">医疗处理及开药记录！</el-tab-pane>
+                <el-tab-pane label="医疗处理及开药记录" name="seventh">
+                    <el-button type = "success" @click="findnodrug">查找所有处理</el-button>
+                    <div class="doctorhome_right_tabs_fourth_iitiend">
+                        <el-table
+                                border
+                                stripe
+                                height="250"
+                                ref="allHandle"
+                                :data="allHandle"
+                                tooltip-effect="dark"
+                                style="width: 100%"
+                                @selection-change="handleSelectionChange">
+                            <el-table-column
+                                    prop="hdo"
+                                    label="名称"
+                                    width="220">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="hgivemoney"
+                                    label="是否缴费"
+                                    show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column
+                                    prop="hused"
+                                    label="是否已做"
+                                    show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column
+                                    prop="hnum"
+                                    label="数量"
+                                    show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column
+                                    prop="halive"
+                                    label="退回"
+                                    width="120">
+                                <template slot-scope="scope">
+                                    <el-button  size="mini" type="danger" @click="deleteDrug(scope.$index)">退回</el-button>
+
+                                    <!--                         获取索引-->
+                                    <!--                         {{scope.$index}}-->
+                                </template>
+
+                            </el-table-column>
+
+                        </el-table>
+                    </div>
+                      <br>
+
+                </el-tab-pane>
             </el-tabs>
         </div>
 
@@ -755,6 +804,20 @@
     export default {
         data(){
           return{
+              //所有药品非药品处理表 已经开的
+              allHandle:[
+                  {
+                      hid:'',
+                      hmrid:'',
+                      hdo:'',
+                      hnum:'',
+                      htime:'',
+                      halive:'',
+                      hgivemoney:'',
+                      hused:'',
+                      hwater:''
+                  }
+              ],
               //所有非药品处理信息
               allNoDrug:[
                   {
@@ -1095,7 +1158,6 @@
 
         }
         ,created() {
-
             this.selectall()
             this.ArrayTestAndInsprctionFinal.splice(0,this.ArrayTestAndInsprctionFinal.length)
             //查找所有非药品
@@ -1152,6 +1214,7 @@
                         this.thisPageInspection_items[i].iimedical = '不可以医保'
                     }
                 }
+                console.log(response.data)
             }).catch(error => {
                 console.log(error)
             })
@@ -1171,11 +1234,57 @@
                         this.thisPageTest_items[i].timedical = '不可以医保'
                     }
                 }
+                console.log(response.data)
             }).catch(error => {
                 console.log(error)
             })
         },
         methods:{
+            //退回药品 非药品
+            deleteDrug(index){
+                this.$axios.post('DoctorHomeController/deleteHandle',
+                    this.$qs.stringify(
+                        {
+                            hid:this.allHandle[index].hid
+                        }
+                    )
+                ).then(response => {      //返回值部分
+                }).catch(error => {
+                    console.log(error)
+                })
+                //刷新
+                this.allHandle.splice(index,1);
+            },
+            //查找所有 handle 包括 drug nodrug
+            findnodrug(){
+
+                //alert(this.thisPRRid)
+                this.$axios.post('DoctorHomeController/selectallHandle',
+                    this.$qs.stringify(
+                        {
+                            prrid:this.thisPRRid
+                        }
+                    )
+                ).then(response => {      //返回值部分
+                       this.allHandle = response.data
+                    for(let i=0;i<this.allHandle.length;i++){
+                        if(this.allHandle[i].hused === 0 ){
+                            this.allHandle[i].hused = "否"
+                        }
+                        if(this.allHandle[i].hgivemoney === 0 ){
+                            this.allHandle[i].hgivemoney = "否"
+                        }
+                        //删除 alive = 1的部分
+                        if(this.allHandle[i].halive === 1){
+                            this.allHandle.splice(i,1);
+                        }
+                    }
+
+
+                }).catch(error => {
+                    console.log(error)
+                })
+            },
             //提交到后台
             uploadnodrug(){
                 if(this.thisPRRid === ''){
@@ -1453,8 +1562,6 @@
 
                                 this.tableDataDrug[index].drmedical = this.allDrug[i].drmedical
                                 //
-
-
                         }
                     }
                 }
@@ -1699,17 +1806,18 @@
                             pinyin: "wu",
                             money: 0,
                             medical: 0,
-                            prrid: this.thisPRRid
+                            prrid: this.thisPRRid,
+                            wrong:''
                         })
                     }
-                    else{
+                    if(inspectionnum === 0){
                         this.thisAllitems.push({
                             id: "i0",
                             name: "检查无",
                             pinyin: "wu",
                             money: 0,
                             medical: 0,
-                            prrid: this.thisPRRid
+                            prrid: this.thisPRRid,
                         })
                     }
 

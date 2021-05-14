@@ -175,6 +175,31 @@ public class DoctorHomeServiceimpl implements DoctorHomeService {
     }
 
     @Override
+    public CopyOnWriteArrayList<Handle> selectallHandle(int mrid) {
+        return mapper.selectallHandle(mrid);
+    }
+
+    @Override
+    public String selectNameByidFromDrug(String id) {
+        return mapper.selectNameByidFromDrug(id);
+    }
+
+    @Override
+    public String selectNameByidFromNoDrug(String id) {
+        return mapper.selectNameByidFromNoDrug(id);
+    }
+
+    @Override
+    public void insertDrugOrHandleWithPayRecord(DrugOrHandleWithPayRecord drugOrHandleWithPayRecord) {
+        mapper.insertDrugOrHandleWithPayRecord(drugOrHandleWithPayRecord);
+    }
+
+    @Override
+    public int countPay() {
+        return mapper.countPay();
+    }
+
+    @Override
     public CopyOnWriteArrayList<Medical_record> selectallTestAndInsprction(int mrid) {
         return mapper.selectallTestAndInsprction(mrid);
     }

@@ -1,7 +1,9 @@
 <template>
     <div class="doctorlogin">
 
-        登陆
+        检验医生登陆
+
+
 
     </div>
 </template>
@@ -12,6 +14,9 @@
 
     export default {
         data(){
+            return{
+                doctorusername:this.$route.query.username,
+            }
 
         },
         components: {

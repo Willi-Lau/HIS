@@ -6,6 +6,7 @@ import com.lwy.demo.entity.*;
 import com.lwy.demo.service.DoctorHomeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RequestMapping("/DoctorHomeController")
 @CrossOrigin
 @Api("医生登陆主界面，操控各种各样的患者")
+@Slf4j
 public class DoctorHomeController {
 
     @Autowired
@@ -131,7 +133,7 @@ public class DoctorHomeController {
 
     @RequestMapping("/upAllitems")
     @ApiOperation("提交检查检验结果，到检查表，检验表，和消费记录")
-    public void upAllitems( @RequestBody Allitems[] thisAllitems){
+    public void upAllitems(@RequestBody Allitems[] thisAllitems){
 
             String id = "";
 
@@ -166,6 +168,8 @@ public class DoctorHomeController {
                      inspection.setInwater(docotrInspectionrecord.getDirid());
                      //提交到检查表
                      service.insertInspection(inspection);
+
+
                  }
                  //存入检验表
                  else{
@@ -314,6 +318,13 @@ public class DoctorHomeController {
             handle.setHwater(doctorDrugrecord.getDdrid());
             //提交
             service.insertHandle(handle);
+            //记录Pay 和 Handle对应的信息
+            DrugOrHandleWithPayRecord drugOrHandleWithPayRecord = new  DrugOrHandleWithPayRecord();
+
+            drugOrHandleWithPayRecord.setDhid(handle.getHid());
+            drugOrHandleWithPayRecord.setPid(Integer.toString(service.countPay()+62));
+            //提交到Pay -Drug-Handle 表
+            service.insertDrugOrHandleWithPayRecord(drugOrHandleWithPayRecord);
 
 
         }
@@ -373,13 +384,44 @@ public class DoctorHomeController {
             handle.setHwater(doctorNodrugrecord.getDndrid());
             //提交
             service.insertHandle(handle);
+            //记录Pay 和 Handle对应的信息
+            DrugOrHandleWithPayRecord drugOrHandleWithPayRecord = new  DrugOrHandleWithPayRecord();
 
-
-
+            drugOrHandleWithPayRecord.setDhid(handle.getHid());
+            drugOrHandleWithPayRecord.setPid(Integer.toString(service.countPay()+62));
+            //提交到Pay -Drug-Handle 表
+            service.insertDrugOrHandleWithPayRecord(drugOrHandleWithPayRecord);
 
         }
 
 
+    }
+    @ApiOperation("根据prrid 返回所有药品所作处理的所有信息 nodrug")
+    @RequestMapping("/selectallHandle")
+    public CopyOnWriteArrayList<Handle> selectallHandle(Integer prrid) {
+        //System.out.println(prrid);
+        //根据prrid 查找mrid
+        int mrid = service.selectMRid(prrid);
+        CopyOnWriteArrayList<Handle> handles = service.selectallHandle(mrid);
+        handles.forEach((i)->{
+            //循环 把id 替换成名字
+            String hdo = i.getHdo();
+            //非药品
+            if(hdo.startsWith("n")){
+                //根据id 在非药品清单里查找
+                String name = service.selectNameByidFromNoDrug(hdo);
+                i.setHdo(name);
+            }
+            //药品
+            else{
+                //根据id 在药品清单里查找
+                String name = service.selectNameByidFromDrug(hdo);
+                i.setHdo(name);
+            }
+
+            log.info(String.valueOf(i));
+        });
+        return handles;
     }
 
 
